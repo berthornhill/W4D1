@@ -43,12 +43,32 @@ class KnightPathFinder
             poss = self.new_move_positions(pos)
             poss.each do |ele| #[1,2] [2,1]
                 new_node = PolyTreeNode.new(ele)
-                new_node.parent = queue.first
+                queue[0].add_child(new_node)
                 queue << new_node                                      
             end 
             queue.shift  
         end
     end
+
+
+    def find_path(end_pos)
+        self.build_move_tree
+        end_node = @root_node.dfs(end_pos)
+        path = trace_path_back(end_node)
+    end 
+
+    def trace_path_back(end_node) #[0,0]
+        path = []
+        current_node = end_node
+        until current_node.parent.nil?
+            path << current_node.value
+            current_node = current_node.parent
+        end
+        path << self.pos
+        path.reverse
+    end
+
+
 
     # def find_path(position)  # Method to determine best possible move from #build_move_tree list
     #     # current_pos = @root_node.value
